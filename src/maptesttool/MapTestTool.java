@@ -8,6 +8,17 @@ import java.awt.event.FocusListener;
 import java.io.*;
 import java.util.Scanner;
 import javax.swing.*;
+// 下面是geotools依赖
+import org.geotools.data.FileDataStore;
+import org.geotools.data.FileDataStoreFinder;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.map.FeatureLayer;
+import org.geotools.map.Layer;
+import org.geotools.map.MapContent;
+import org.geotools.styling.SLD;
+import org.geotools.styling.Style;
+import org.geotools.swing.JMapFrame;
+import org.geotools.swing.data.JFileDataStoreChooser;
 
 public class MapTestTool {
     // int inputFlag = 0; // 输入上报区域的节流阀
@@ -150,12 +161,34 @@ public class MapTestTool {
         jb1.setHorizontalTextPosition(SwingConstants.CENTER);
         jb1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "即将选择并打开地图文件，\n本应用支持数据格式：.shp文件", "按钮提示", JOptionPane.PLAIN_MESSAGE,
-                        imageIcon_menu);
-                // TODO 打开地图文件显示 geotools可用
-                JFileChooser openMapChooser = new JFileChooser(".");
-                openMapChooser.setDialogTitle("打开地图文件");
-                openMapChooser.showOpenDialog(null);
+                JOptionPane.showMessageDialog(null, "即将选择并打开地图文件，\n本应用目前支持数据格式：.shp文件", "按钮提示",
+                        JOptionPane.PLAIN_MESSAGE, imageIcon_menu);
+                // TODO 打开地图文件显示 这里使用geotools
+
+                // display a data store file chooser dialog for shapefiles
+                File file = JFileDataStoreChooser.showOpenFile("shp", null);
+                if (file == null) {
+                    return;
+                }
+                FileDataStore store;
+                try {
+                    store = FileDataStoreFinder.getDataStore(file);
+                    SimpleFeatureSource featureSource;
+                    featureSource = store.getFeatureSource();
+
+                    // Create a map content and add our shapefile to it
+                    MapContent map = new MapContent();
+                    map.setTitle("地图文件查看");
+
+                    Style style = SLD.createSimpleStyle(featureSource.getSchema());
+                    Layer layer = new FeatureLayer(featureSource, style);
+                    map.addLayer(layer);
+
+                    // Now display the map
+                    JMapFrame.showMap(map);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -282,7 +315,9 @@ public class MapTestTool {
                 // DONE 查找文件
                 int[] ErrorsCnt = { 0, 0 }; // 错误上报数量的计数值，第二个是一个找到个数的计数值
                 String itemSearchString[] = new String[100]; // 这里暂时先写死，查100条
-                MyreadFileItems("Errors.txt", itemSearchString, ErrorsCnt);
+                String dir = System.getProperty("user.dir"); // 获取当前路径，打开文件
+                String filepath = dir + "/Errors.txt";
+                MyreadFileItems(filepath, itemSearchString, ErrorsCnt);
                 System.out.println(ErrorsCnt[0]);
                 cntRecord[1] = ErrorsCnt[1];
                 for (int i = 1; i <= ErrorsCnt[0]; i++) {
@@ -340,7 +375,9 @@ public class MapTestTool {
 
                 int[] ErrorsCnt = { 0, 0 }; // 错误上报数量的计数值，第二个是一个找到个数的计数值
                 String itemSearchString[] = new String[100]; // 这里暂时先写死，查100条
-                MyreadFileItems("Errors.txt", itemSearchString, ErrorsCnt);
+                String dir = System.getProperty("user.dir"); // 获取当前路径，打开文件
+                String filepath = dir + "/Errors.txt";
+                MyreadFileItems(filepath, itemSearchString, ErrorsCnt);
 
                 if (cntRecord[0] < 1 || cntRecord[0] > ErrorsCnt[0]) {
                     JOptionPane.showMessageDialog(null, "您的搜索不合法，请先进行或重新搜索！", "查找结果", JOptionPane.PLAIN_MESSAGE,

@@ -5,5 +5,5 @@ lib/
 # 忽略git文件夹
 .git/
 
-# 忽略Errors文件
-# Errors.txt
+# 忽略data文件夹下的数据文件
+src/data/

@@ -1,6 +1,6 @@
 ## What's this
 
-Welcome to the MapTestTool. Here is a desktop application tool for map data quality inspection (地图数据质检工具).
+Welcome to the MapTestTool. Here is a desktop application tool for map data quality inspection (`地图数据质检工具`).
 
 ## Aim and Usage
 
@@ -9,7 +9,7 @@ The workspace contains two major function by default, where:
 - `地图数据显示`: 可视化显示：地图（栅格/矢量）形式；文本显示：直接显示数据内容。
 - `错误记录管理`: 位置标识，错误记录保存，错误记录查询。
 
-## Require
+## Requirement
 
 >设计开发用于空间数据质量检查的应用软件工具，该工具运行于单PC机桌面环境，不需要网络连接；说明及评估所采用的软件架构风格。
 
@@ -23,6 +23,14 @@ The workspace contains two major function by default, where:
 
 - `D、错误记录查询`：地图数据加载后，在质检工具中打开已保存的错误信息文件，可通过输入关键字搜索并显示出错情况。
 
+## Dependence and Tips
+
+- `GeoTools`：https://www.geotools.org/ 
+  `version`：geotools-26.3-bin.zip
+
+- `How to run it`：clone, and new folders named `/bin` and `/lib`, import needed `GeoTools` jar mentioned before into the folder `/lib` and run main.
+
 ## Information
 
-> Using Java, by Guan, Doing.
+> Using Java, developed in VSCode, by Guan, Doing.
+> Github: https://github.com/Andytonglove/MapTestTool
