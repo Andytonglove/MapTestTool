@@ -1,0 +1,9 @@
+# 忽略bin文件夹和lib文件夹
+bin/
+lib/
+
+# 忽略git文件夹
+.git/
+
+# 忽略Errors文件
+# Errors.txt
