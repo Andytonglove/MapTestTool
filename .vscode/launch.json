@@ -16,13 +16,6 @@
             "request": "launch",
             "mainClass": "maptesttool.MapTestTool",
             "projectName": "MapTestTool_61675ba6"
-        },
-        {
-            "type": "java",
-            "name": "Launch OutputOrderNum",
-            "request": "launch",
-            "mainClass": "outputpack.OutputOrderNum",
-            "projectName": "MapTestTool_61675ba6"
         }
     ]
 }
