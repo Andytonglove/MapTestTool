@@ -161,34 +161,60 @@ public class MapTestTool {
         jb1.setHorizontalTextPosition(SwingConstants.CENTER);
         jb1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "即将选择并打开地图文件，\n本应用目前支持数据格式：.shp文件", "按钮提示",
-                        JOptionPane.PLAIN_MESSAGE, imageIcon_menu);
-                // TODO 打开地图文件显示 这里使用geotools
+                // 打开地图文件显示 这里使用geotools
 
-                // display a data store file chooser dialog for shapefiles
-                File file = JFileDataStoreChooser.showOpenFile("shp", null);
-                if (file == null) {
-                    return;
+                Object[] fileType = { "矢量地图文件", "栅格地图文件", "取消" };
+                int cho = JOptionPane.showOptionDialog(null,
+                        "即将选择并打开地图文件，请选择您想打开的地图数据文件格式。\n"
+                                + "本按钮目前演示的支持数据格式为：.shp矢量文件、.tif栅格文件（暂不）。\n"
+                                + "查看结束后关闭地图窗口将自动退出程序，如需标注上报请点击标记位置获取信息填写上报。",
+                        "地图显示按钮提示",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, fileType, fileType[0]);
+                if (cho == 0) {
+                    // 矢量地图文件：shp文件展示，利用geotools
+
+                    // display a data store file chooser dialog for shapefiles
+                    File file = JFileDataStoreChooser.showOpenFile("shp", null);
+                    if (file == null) {
+                        return;
+                    }
+                    String shpName = file.getName();
+                    textAreaTopArea.setText("数据文件名：" + shpName);
+                    FileDataStore store;
+                    try {
+                        store = FileDataStoreFinder.getDataStore(file);
+                        SimpleFeatureSource featureSource;
+                        featureSource = store.getFeatureSource();
+
+                        // Create a map content and add our shapefile to it
+                        MapContent map = new MapContent();
+                        map.setTitle("矢量地图文件查看");
+
+                        Style style = SLD.createSimpleStyle(featureSource.getSchema());
+                        Layer layer = new FeatureLayer(featureSource, style);
+                        map.addLayer(layer);
+
+                        // Now display the map
+                        JMapFrame.showMap(map);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+
+                } else if (cho == 1) {
+                    // 栅格地图文件：tif文件展示，利用geotools
+
+                    // display a data store file chooser dialog for shapefiles
+                    File file = JFileDataStoreChooser.showOpenFile("tif", null);
+                    if (file == null) {
+                        return;
+                    }
+                    // TODO tif展示
+                    JOptionPane.showMessageDialog(null, "tif文件格式的文件读取正在实现中，暂不支持！", "Sorry！",
+                            JOptionPane.PLAIN_MESSAGE,
+                            imageIcon_menu);
                 }
-                FileDataStore store;
-                try {
-                    store = FileDataStoreFinder.getDataStore(file);
-                    SimpleFeatureSource featureSource;
-                    featureSource = store.getFeatureSource();
 
-                    // Create a map content and add our shapefile to it
-                    MapContent map = new MapContent();
-                    map.setTitle("地图文件查看");
-
-                    Style style = SLD.createSimpleStyle(featureSource.getSchema());
-                    Layer layer = new FeatureLayer(featureSource, style);
-                    map.addLayer(layer);
-
-                    // Now display the map
-                    JMapFrame.showMap(map);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
             }
         });
 
@@ -443,24 +469,38 @@ public class MapTestTool {
         // 1-4.打开数据地图文件
         ActionListener listenOpenFile = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO 打开地图文件
-                String openTypeString = "";
+                // DONE 打开地图文件 直接通过提示框引到大按钮处
                 if (e.getSource() == item1) {
-                    openTypeString = "打开数据文件";
+                    JOptionPane.showMessageDialog(null, "请通过下方按钮选择您想要打开的文件形式，并查看提示！", "打开文件提示",
+                            JOptionPane.PLAIN_MESSAGE,
+                            imageIcon_menu);
                 }
                 if (e.getSource() == item2) {
-                    openTypeString = "打开栅格地图文件";
-
+                    JOptionPane.showMessageDialog(null, "请通过下方地图显示按钮选择您想要打开的文件形式，并打开文件可视化查看！", "打开栅格地图文件提示",
+                            JOptionPane.PLAIN_MESSAGE,
+                            imageIcon_menu);
                 }
                 if (e.getSource() == item3) {
-                    openTypeString = "打开矢量地图文件";
+                    JOptionPane.showMessageDialog(null, "请通过下方地图显示按钮选择您想要打开的文件形式，并打开文件可视化查看！", "打开矢量地图文件提示",
+                            JOptionPane.PLAIN_MESSAGE,
+                            imageIcon_menu);
                 }
                 if (e.getSource() == item4) {
-                    openTypeString = "打开文本数据文件";
+                    JFileChooser openFileChooser = new JFileChooser(".");
+                    openFileChooser.setDialogTitle("打开文本数据文件");
+                    openFileChooser.showOpenDialog(null);
+                    File file = openFileChooser.getSelectedFile();
+                    String fileName = file.getName();
+                    textAreaTopArea.setText("数据文件名：" + fileName);
+                    try {
+                        Desktop.getDesktop().open(file); // 启动已在本机桌面上注册的关联应用程序，打开文件.
+                    } catch (Exception e2) {
+                        // 异常处理
+                        JOptionPane.showMessageDialog(null, "文件不合法，请检查您的文件！", "错误", JOptionPane.PLAIN_MESSAGE,
+                                imageIcon_menu);
+                        System.err.println(e2);
+                    }
                 }
-                JFileChooser openFileChooser = new JFileChooser(".");
-                openFileChooser.setDialogTitle(openTypeString);
-                openFileChooser.showOpenDialog(null);
             }
         };
         item1.addActionListener(listenOpenFile);
@@ -510,7 +550,7 @@ public class MapTestTool {
                             imageIcon_menu);
                 }
                 if (e.getSource() == item9) {
-                    JOptionPane.showMessageDialog(null, "请在【地图查看】界面标识查询", "错误记录标识查询", JOptionPane.PLAIN_MESSAGE,
+                    JOptionPane.showMessageDialog(null, "请在【地图查看】界面标识查询，点击查看坐标", "错误记录标识查询", JOptionPane.PLAIN_MESSAGE,
                             imageIcon_menu);
                 }
                 if (e.getSource() == item10 || e.getSource() == item11) {
@@ -535,7 +575,6 @@ public class MapTestTool {
 
         // 12.残忍再见
         item12.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
