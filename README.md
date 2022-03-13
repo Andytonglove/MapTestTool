@@ -28,7 +28,7 @@ The workspace contains two major function by default, where:
 - `GeoTools`：https://www.geotools.org/ 
   `version`：geotools-26.3-bin.zip
 
-- `How to run it`：clone, and new folders named `/bin` and `/lib`, import needed `GeoTools` jar mentioned before into the folder `/lib` and run main.
+- `How to run it`：clone, and new folders named `/bin` and `/lib`, import `GeoTools` jar mentioned before (or you can use Maven) into the folder `/lib` and run main.
 
 ## Information
 

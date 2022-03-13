@@ -7,3 +7,6 @@ lib/
 
 # 忽略data文件夹下的数据文件
 src/data/
+
+# 忽略jar包
+*.jar
