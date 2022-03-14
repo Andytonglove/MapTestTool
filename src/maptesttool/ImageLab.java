@@ -49,17 +49,17 @@ public class ImageLab {
     private JMapFrame frame;
     private GridCoverage2DReader reader;
 
-    public static void main(String[] args) throws Exception {
-        ImageLab me = new ImageLab();
-        me.getLayersAndDisplay();
-    }
+    // public static void main(String[] args) throws Exception {
+    // ImageLab me = new ImageLab();
+    // me.getLayersAndDisplay(); // 这个函数本是private方法，改到跨类调用
+    // }
 
     /**
      * Prompts the user for a GeoTIFF file and a Shapefile and passes them to the
      * displayLayers
      * method
      */
-    private void getLayersAndDisplay() throws Exception {
+    public void getLayersAndDisplay() throws Exception {
         List<Parameter<?>> list = new ArrayList<>();
         list.add(
                 new Parameter<>(

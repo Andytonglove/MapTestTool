@@ -172,7 +172,7 @@ public class MapTestTool {
                         JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, fileType, fileType[0]);
                 if (cho == 0) {
-                    // 矢量地图文件：shp文件展示，利用geotools
+                    // FIXME 矢量地图文件：shp文件展示，利用geotools
 
                     // display a data store file chooser dialog for shapefiles
                     File file = JFileDataStoreChooser.showOpenFile("shp", null);
@@ -469,11 +469,15 @@ public class MapTestTool {
         // 1-4.打开数据地图文件
         ActionListener listenOpenFile = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // DONE 打开地图文件 直接通过提示框引到大按钮处
+                // DONE 打开地图文件
                 if (e.getSource() == item1) {
-                    JOptionPane.showMessageDialog(null, "请通过下方按钮选择您想要打开的文件形式，并查看提示！", "打开文件提示",
-                            JOptionPane.PLAIN_MESSAGE,
-                            imageIcon_menu);
+                    // FIXME 这里借用基于geotools的ImageLab示例
+                    ImageLab me = new ImageLab();
+                    try {
+                        me.getLayersAndDisplay();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
                 }
                 if (e.getSource() == item2) {
                     JOptionPane.showMessageDialog(null, "请通过下方地图显示按钮选择您想要打开的文件形式，并打开文件可视化查看！", "打开栅格地图文件提示",
@@ -512,8 +516,19 @@ public class MapTestTool {
         ActionListener listenUploadListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == item5) {
-                    JOptionPane.showMessageDialog(null, "暂不支持错误表示上报，请使用输入上报", "错误标识上报", JOptionPane.PLAIN_MESSAGE,
+                    JOptionPane.showMessageDialog(null, "请通过在界面中标识选择，点击查看坐标进行输入上报", "错误标识上报", JOptionPane.PLAIN_MESSAGE,
                             imageIcon_menu);
+                    // FIXME 利用geotools的SelectionLab示例
+                    SelectionLab me = new SelectionLab();
+                    File file = JFileDataStoreChooser.showOpenFile("shp", null);
+                    if (file == null) {
+                        return;
+                    }
+                    try {
+                        me.displayShapefile(file);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
                 }
                 if (e.getSource() == item6) {
                     JOptionPane.showMessageDialog(null, "请按照右侧提示，在文本框内输入相关错误信息，\n"
