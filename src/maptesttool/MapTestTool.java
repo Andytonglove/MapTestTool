@@ -124,7 +124,7 @@ public class MapTestTool {
         textArea.setForeground(Color.BLUE);
         textArea.setFont(new Font("楷体", Font.PLAIN, 16));
 
-        // 主体首页页面部分
+        // 下面是主体首页页面部分
 
         // 左侧上部切换窗口
         JTextArea textAreaTopArea = new JTextArea();
@@ -172,7 +172,7 @@ public class MapTestTool {
                         JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, fileType, fileType[0]);
                 if (cho == 0) {
-                    // FIXME 矢量地图文件：shp文件展示，利用geotools
+                    // 矢量地图文件：shp文件展示，利用geotools
 
                     // display a data store file chooser dialog for shapefiles
                     File file = JFileDataStoreChooser.showOpenFile("shp", null);
@@ -196,7 +196,16 @@ public class MapTestTool {
                         map.addLayer(layer);
 
                         // Now display the map
-                        JMapFrame.showMap(map);
+                        // JMapFrame.showMap(map); // 这里下面用MapContent去代替静态方法的使用
+
+                        // Create a JMapFrame with a menu to choose the display style for the
+                        JMapFrame frame = new JMapFrame(map);
+                        frame.setSize(800, 600);
+                        frame.enableStatusBar(true);
+                        frame.enableToolBar(true);
+                        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 这里加上这一句以销毁窗口！
+                        frame.setVisible(true);
+
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -204,15 +213,14 @@ public class MapTestTool {
                 } else if (cho == 1) {
                     // 栅格地图文件：tif文件展示，利用geotools
 
-                    // display a data store file chooser dialog for shapefiles
-                    File file = JFileDataStoreChooser.showOpenFile("tif", null);
-                    if (file == null) {
-                        return;
+                    // FIXME tif展示 存在展示卡加载的问题
+                    GeoTiffLab me = new GeoTiffLab();
+                    try {
+                        me.getTiffLayersAndDisplay();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
-                    // TODO tif展示
-                    JOptionPane.showMessageDialog(null, "tif文件格式的文件读取正在实现中，暂不支持！", "Sorry！",
-                            JOptionPane.PLAIN_MESSAGE,
-                            imageIcon_menu);
+
                 }
 
             }
@@ -471,7 +479,7 @@ public class MapTestTool {
             public void actionPerformed(ActionEvent e) {
                 // DONE 打开地图文件
                 if (e.getSource() == item1) {
-                    // FIXME 这里借用基于geotools的ImageLab示例
+                    // 这里借用基于geotools的ImageLab示例（这里可以是多个）
                     ImageLab me = new ImageLab();
                     try {
                         me.getLayersAndDisplay();
@@ -518,7 +526,7 @@ public class MapTestTool {
                 if (e.getSource() == item5) {
                     JOptionPane.showMessageDialog(null, "请通过在界面中标识选择，点击查看坐标进行输入上报", "错误标识上报", JOptionPane.PLAIN_MESSAGE,
                             imageIcon_menu);
-                    // FIXME 利用geotools的SelectionLab示例
+                    // DONE 利用geotools的SelectionLab示例，支持shp
                     SelectionLab me = new SelectionLab();
                     File file = JFileDataStoreChooser.showOpenFile("shp", null);
                     if (file == null) {

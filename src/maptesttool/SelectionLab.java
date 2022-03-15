@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
@@ -114,7 +115,7 @@ public class SelectionLab {
          * with a default line and colour style
          */
         MapContent map = new MapContent();
-        map.setTitle("Feature selection tool example");
+        map.setTitle("Feature selection tool example标注上报");
         Style style = createDefaultStyle();
         Layer layer = new FeatureLayer(featureSource, style);
         map.addLayer(layer);
@@ -156,6 +157,7 @@ public class SelectionLab {
          */
         mapFrame.setSize(600, 600);
         mapFrame.setVisible(true);
+        mapFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 这里加上这一句以销毁窗口！
     }
     // docs end display shapefile
 
