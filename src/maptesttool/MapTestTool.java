@@ -216,7 +216,8 @@ public class MapTestTool {
                     // FIXME tif展示 存在展示卡加载的问题
                     GeoTiffLab me = new GeoTiffLab();
                     try {
-                        me.getTiffLayersAndDisplay();
+                        String tifPath = me.getTiffLayersAndDisplay();
+                        textAreaTopArea.setText("数据文件名：" + tifPath);
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
@@ -646,12 +647,12 @@ public class MapTestTool {
 
                 textArea6.setEditable(false);
                 textArea6.append("本Java程序开发信息：本桌面程序为地图数据检查工具。\n\n"
-                        + "包括内容：\n"
+                        + "包括主要内容：\n"
                         + "1、地图数据显示：地图(栅格/矢量)可视化与文本显示；\n"
                         + "2、错误记录管理：位置标识、错误记录保存、错误记录查询。\n"
                         + "软件版本：Version 0.1\n"
                         + "开发设计：关子安\n"
-                        + "开发基于：Java GUI");
+                        + "开发基于：Java GUI、GeoTools");
                 textArea6.setEditable(false);
 
             }

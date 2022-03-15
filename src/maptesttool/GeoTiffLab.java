@@ -45,7 +45,7 @@ public class GeoTiffLab {
     private JMapFrame frame;
     private GridCoverage2DReader reader;
 
-    public void getTiffLayersAndDisplay() throws Exception {
+    public String getTiffLayersAndDisplay() throws Exception {
         List<Parameter<?>> list = new ArrayList<>();
         list.add(
                 new Parameter<>(
@@ -63,10 +63,12 @@ public class GeoTiffLab {
             System.exit(0);
         }
         File imageFile = (File) wizard.getConnectionParameters().get("image");
-        displayTiffLayers(imageFile);
+        String filePath = displayTiffLayers(imageFile);
+
+        return filePath;
     }
 
-    public void displayTiffLayers(File rasterFile) throws Exception {
+    public String displayTiffLayers(File rasterFile) throws Exception {
         AbstractGridFormat format = GridFormatFinder.findFormat(rasterFile);
         // this is a bit hacky but does make more geotiffs work
         Hints hints = new Hints();
@@ -124,6 +126,8 @@ public class GeoTiffLab {
         // Finally display the map frame.
         // When it is closed the app will exit.
         frame.setVisible(true);
+
+        return rasterFile.getName(); // 返回文件名模块，和上一起添加
     }
 
     private Style createGreyscaleStyle() {
